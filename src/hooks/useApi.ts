@@ -2,12 +2,12 @@ import { useState, useCallback } from 'react';
 import { useLoader } from '../context/LoaderContext';
 import type { ApiError } from '../types';
 
-export const useApi = <T,>() => {
+export const useApi = () => {
   const [error, setError] = useState<string | null>(null);
   const { setLoading } = useLoader();
 
   const execute = useCallback(
-    async (apiCall: () => Promise<T>): Promise<T | null> => {
+    async <T,>(apiCall: () => Promise<T>): Promise<T | null> => {
       setError(null);
       setLoading(true);
       try {
@@ -23,7 +23,7 @@ export const useApi = <T,>() => {
       }
     },
     [setLoading]
-  );
+  ) as <T,>(apiCall: () => Promise<T>) => Promise<T | null>;
 
   return { execute, error, setError };
 };
